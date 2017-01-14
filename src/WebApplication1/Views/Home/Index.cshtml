@@ -1,0 +1,35 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+Home page
+<div id="display"></div>
+
+<script>
+   
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+
+    xhr.addEventListener("readystatechange", function () {
+    if (this.readyState === 4) {
+        //document.getElementById("display").innerText = ;
+        var json = this.response;
+        var html = "";
+        json.forEach(function(obj) {  html+="<h2>"+obj.categoryName+"</h2>";
+            html += "<br/>"; });
+           
+       
+       document.getElementById("display").innerHTML = html;
+
+    }
+    });
+
+    xhr.open("GET", "http://localhost:52193/api/category/getall");
+    xhr.setRequestHeader("content-type", "application/json");
+    xhr.setRequestHeader("cache-control", "no-cache");
+    xhr.setRequestHeader("postman-token", "ff423473-cb58-6c83-a81b-e193b4f30edc");
+
+    xhr.send();
+</script>
