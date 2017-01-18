@@ -20,6 +20,7 @@ namespace WebApplication1.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int subcategoryID { get; set; }
         public string subCategoryName { get; set; }
-        
+        public Category category { get; set; }
+
     }
 }

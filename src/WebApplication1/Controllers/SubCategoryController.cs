@@ -10,47 +10,31 @@ using WebApplication1.Models;
 
 namespace WebApplication1.Controllers
 {
-    /// <summary>
-    /// category controller class
-    /// </summary>
-    /// 
     [Route("api/[controller]")]
-    [Produces("application/json")]
-    public class CategoryController : Controller
+    public class SubCategoryController : Controller
     {
-        
-        private readonly ICategoryRepository _repository;
-        /// <summary>
-        /// constructor
-        /// </summary>
-        /// <param name="repository"></param>
-        public CategoryController(ICategoryRepository repository)
+        private ISubCategoryRepository _repository;
+
+        // GET: api/values
+
+        public SubCategoryController(ISubCategoryRepository repository)
         {
             _repository = repository;
         }
-
-        // GET: api/values
-        /// <summary>
-        /// gets all the categories
-        /// </summary>
-        /// <returns></returns>
         [HttpGet]
-      
-         public IEnumerable<Category> GetAll()
+        public IEnumerable<SubCategory> Get()
         {
             return _repository.Get();
         }
-
-        // GET api/values/5
-       [HttpGet("{id}")]
-        public Category Get(int id)
+        [HttpGet("{id}")]
+        public SubCategory Get(int id)
         {
             return _repository.Get(id);
         }
 
         // POST api/values
         [HttpPost]
-        public IActionResult Post(Category model)
+        public IActionResult Post([FromBody]SubCategory model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -59,19 +43,20 @@ namespace WebApplication1.Controllers
             {
                 _repository.Save();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
             return Ok(model);
         }
 
+        // PUT api/values/5
         [HttpPut]
-        public IActionResult Put(int id, [FromBody]Category model)
+        public IActionResult Put(int id, [FromBody]SubCategory model)
         {
-            if (!ModelState.IsValid && id!=model.categoryID)
+            if (!ModelState.IsValid && id != model.subcategoryID)
                 return BadRequest(ModelState);
-           
+
             _repository.Update(model);
             try
             {
@@ -85,8 +70,7 @@ namespace WebApplication1.Controllers
         }
 
         // DELETE api/values/5
-    
-            [HttpDelete]
+        [HttpDelete]
         public IActionResult Delete(int id)
         {
             _repository.Delete(id);
@@ -94,7 +78,7 @@ namespace WebApplication1.Controllers
             {
                 _repository.Save();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

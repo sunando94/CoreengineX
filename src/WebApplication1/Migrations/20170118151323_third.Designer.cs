@@ -8,9 +8,10 @@ using WebApplication1;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170118151323_third")]
+    partial class third
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")
@@ -307,13 +308,9 @@ namespace WebApplication1.Migrations
                     b.Property<int>("subcategoryID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("categoryID");
-
                     b.Property<string>("subCategoryName");
 
                     b.HasKey("subcategoryID");
-
-                    b.HasIndex("categoryID");
 
                     b.ToTable("subCategories");
                 });
@@ -427,13 +424,6 @@ namespace WebApplication1.Migrations
                     b.HasOne("WebApplication1.Models.ApplicationUser", "user")
                         .WithMany()
                         .HasForeignKey("userId");
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.SubCategory", b =>
-                {
-                    b.HasOne("WebApplication1.Models.Category", "category")
-                        .WithMany()
-                        .HasForeignKey("categoryID");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.ApplicationUser", b =>

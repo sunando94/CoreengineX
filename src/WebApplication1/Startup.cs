@@ -38,7 +38,12 @@ namespace WebApplication1
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
                  options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            //Repo linking
             services.AddScoped(typeof(ICategoryRepository),typeof(CategoryRepository));
+            services.AddScoped(typeof(ISubCategoryRepository), typeof(SubCategoryRepository));
+
+
+
             services.AddIdentity<ApplicationUser, IdentityRole>()
                .AddEntityFrameworkStores<ApplicationDbContext>()
                .AddDefaultTokenProviders();
@@ -50,26 +55,27 @@ namespace WebApplication1
                     .AllowAnyHeader()
                     .AllowCredentials());
             });
+            
             services.AddMvc();
             services.AddSwaggerGen();
-         //   services.ConfigureSwaggerGen(option => );
-           //     option.SingleApiVersion(new Swashbuckle.Swagger.Model.Info{
-                    
-           // //        Version="v1",
-           //         //                    Title = "Lzyness & bzyness application",
-                                            
-           //        //                   });
-           // ////    //Determine base path for the application.
-           // //    var basePath = PlatformServices.Default.Application.ApplicationBasePath;
+            //   services.ConfigureSwaggerGen(option => );
+            //     option.SingleApiVersion(new Swashbuckle.Swagger.Model.Info{
 
-           // //    //Set the comments path for the swagger json and ui.
-           // //    var xmlPath = Path.Combine(basePath, "WebApplication1.xml");
+            // //        Version="v1",
+            //         //                    Title = "Lzyness & bzyness application",
 
-           // //    option.IncludeXmlComments(xmlPath);
+            //        //                   });
+            // ////    //Determine base path for the application.
+            // //    var basePath = PlatformServices.Default.Application.ApplicationBasePath;
 
-           //});
+            // //    //Set the comments path for the swagger json and ui.
+            // //    var xmlPath = Path.Combine(basePath, "WebApplication1.xml");
 
-           
+            // //    option.IncludeXmlComments(xmlPath);
+
+            //});
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
