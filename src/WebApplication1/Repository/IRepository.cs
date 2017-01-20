@@ -25,4 +25,16 @@ namespace WebApplication1.Repository
         void Save();
 
     }
+    public interface IItemRepository:IDisposable
+    {
+         IEnumerable<Item> Get();
+         Item Get(int id);
+         void Insert(Item model);
+         void Update(Item model);
+         void Delete(int id);
+         void Save();
+         void AddAttributes(int id,Attribute model);
+         void UpdateAttribute(int id,string key,Attribute model);
+         void DeleteAttribute(int id,string key);
+    }
 }
