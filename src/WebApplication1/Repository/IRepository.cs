@@ -33,8 +33,8 @@ namespace WebApplication1.Repository
          void Update(Item model);
          void Delete(int id);
          void Save();
-         void AddAttributes(int id,Attribute model);
-         void UpdateAttribute(int id,string key,Attribute model);
+         void AddAttributes(int id,Attributes model);
+         void UpdateAttribute(int id,string key,Attributes model);
          void DeleteAttribute(int id,string key);
     }
 }
