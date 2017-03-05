@@ -88,7 +88,8 @@ namespace coreenginex
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-            if(env.IsDevelopment())
+            app.UseDeveloperExceptionPage();
+            if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
           //  app.CreatePerOwinContext<ApplicationSignInManager>(ApplicationSignInManager.Create);
             var signingKey = _signingKey;
