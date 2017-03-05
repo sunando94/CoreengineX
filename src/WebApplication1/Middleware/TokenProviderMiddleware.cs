@@ -34,8 +34,7 @@ namespace coreenginex.Middleware
             if (!context.Request.Path.Equals(_options.Path, StringComparison.Ordinal))
                 return _next(context);
             if(!context.Request.Method.Equals("POST") || !context.Request.HasFormContentType)
-            {
-                context.Response.StatusCode = 400;
+            {    context.Response.StatusCode = 400;
                 return context.Response.WriteAsync("Bad Request");
             }
            // return null;

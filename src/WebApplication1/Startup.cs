@@ -101,7 +101,7 @@ namespace coreenginex
 
 
             };
-            RolesData.SeedRoles(app.ApplicationServices).Wait();
+             RolesData.SeedRoles(app.ApplicationServices).Wait();
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions()
             {
@@ -143,32 +143,10 @@ namespace coreenginex
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
             
             app.UseIdentity();
-            //var jwtAppSettingOptions = Configuration.GetSection(nameof(TokenProviderOption));
-            //var tokenValidationParameters = new TokenValidationParameters
-            //{
-            //    ValidateIssuer = true,
-            //    ValidIssuer = jwtAppSettingOptions[nameof(TokenProviderOption.Issuer)],
-
-            //    ValidateAudience = true,
-            //    ValidAudience = jwtAppSettingOptions[nameof(TokenProviderOption.Audience)],
-
-            //    ValidateIssuerSigningKey = true,
-            //    IssuerSigningKey = signingKey,
-
-            //    RequireExpirationTime = true,
-            //    ValidateLifetime = true,
-
-            //    ClockSkew = TimeSpan.Zero
-            //};
-            //app.UseJwtBearerAuthentication(new JwtBearerOptions
-            //{
-            //    AutomaticAuthenticate = true,
-            //    AutomaticChallenge = true,
-            //    TokenValidationParameters = tokenValidationParameters
-            //});
-
+          
 
             app.UseMiddleware<TokenProviderMiddleware>(Options.Create(options));
+            app.UseMiddleware<SwaggerAuth>();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(name: "Home", template: "{controller}/{action}",
