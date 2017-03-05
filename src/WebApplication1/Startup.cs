@@ -146,7 +146,7 @@ namespace coreenginex
           
 
             app.UseMiddleware<TokenProviderMiddleware>(Options.Create(options));
-            app.UseMiddleware<SwaggerAuth>();
+           // app.UseMiddleware<SwaggerAuth>();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(name: "Home", template: "{controller}/{action}",
