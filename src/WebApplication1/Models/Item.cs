@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace WebApplication1.Models
+namespace coreenginex.Models
 {
     public class Item
     {
@@ -14,6 +14,8 @@ namespace WebApplication1.Models
         public string itemName { get; set; }
         public string itemDescription { get; set; }
         public decimal itemPrice { get; set; }
+        public SubCategory subCategory { get; set; }
+        public Category category { get; set; }
         public List<Attributes> itemAttributes { get; set; }
     }
 

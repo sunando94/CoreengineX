@@ -3,19 +3,165 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using WebApplication1;
+using coreenginex;
 
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170118151323_third")]
-    partial class third
+    [Migration("20170129115603_one")]
+    partial class one
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("coreenginex.Models.Attributes", b =>
+                {
+                    b.Property<int>("attributeID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("attributeKey");
+
+                    b.Property<string>("attributeValue");
+
+                    b.Property<int?>("itemID");
+
+                    b.HasKey("attributeID");
+
+                    b.HasIndex("itemID");
+
+                    b.ToTable("attributes");
+                });
+
+            modelBuilder.Entity("coreenginex.Models.Business", b =>
+                {
+                    b.Property<int>("businessID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Id");
+
+                    b.Property<string>("UserId");
+
+                    b.Property<string>("businessName");
+
+                    b.Property<int?>("businessThumbimageID");
+
+                    b.HasKey("businessID");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("businessThumbimageID");
+
+                    b.ToTable("businesses");
+                });
+
+            modelBuilder.Entity("coreenginex.Models.Category", b =>
+                {
+                    b.Property<int>("categoryID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("categoryName");
+
+                    b.HasKey("categoryID");
+
+                    b.ToTable("categories");
+                });
+
+            modelBuilder.Entity("coreenginex.Models.Image", b =>
+                {
+                    b.Property<int>("imageID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("businessID");
+
+                    b.Property<string>("imageUrl");
+
+                    b.Property<int?>("itemID");
+
+                    b.HasKey("imageID");
+
+                    b.HasIndex("businessID");
+
+                    b.HasIndex("itemID");
+
+                    b.ToTable("images");
+                });
+
+            modelBuilder.Entity("coreenginex.Models.Item", b =>
+                {
+                    b.Property<int>("itemID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("businessID");
+
+                    b.Property<string>("itemDescription");
+
+                    b.Property<string>("itemName");
+
+                    b.Property<decimal>("itemPrice");
+
+                    b.Property<int?>("itemThumbimageID");
+
+                    b.HasKey("itemID");
+
+                    b.HasIndex("businessID");
+
+                    b.HasIndex("itemThumbimageID");
+
+                    b.ToTable("items");
+                });
+
+            modelBuilder.Entity("coreenginex.Models.Location", b =>
+                {
+                    b.Property<int>("locationID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<double>("latitude");
+
+                    b.Property<double>("longitude");
+
+                    b.HasKey("locationID");
+
+                    b.ToTable("Location");
+                });
+
+            modelBuilder.Entity("coreenginex.Models.Reviews", b =>
+                {
+                    b.Property<int>("reviewID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("businessID");
+
+                    b.Property<string>("review");
+
+                    b.Property<string>("userId");
+
+                    b.HasKey("reviewID");
+
+                    b.HasIndex("businessID");
+
+                    b.HasIndex("userId");
+
+                    b.ToTable("reviews");
+                });
+
+            modelBuilder.Entity("coreenginex.Models.SubCategory", b =>
+                {
+                    b.Property<int>("subcategoryID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("categoryID");
+
+                    b.Property<string>("subCategoryName");
+
+                    b.HasKey("subcategoryID");
+
+                    b.HasIndex("categoryID");
+
+                    b.ToTable("subCategories");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
                 {
@@ -179,143 +325,7 @@ namespace WebApplication1.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.Attributes", b =>
-                {
-                    b.Property<int>("attributeID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("attributeKey");
-
-                    b.Property<string>("attributeValue");
-
-                    b.Property<int?>("itemID");
-
-                    b.HasKey("attributeID");
-
-                    b.HasIndex("itemID");
-
-                    b.ToTable("attributes");
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.Business", b =>
-                {
-                    b.Property<int>("businessID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("businessName");
-
-                    b.Property<int?>("businessThumbimageID");
-
-                    b.HasKey("businessID");
-
-                    b.HasIndex("businessThumbimageID");
-
-                    b.ToTable("businesses");
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.Category", b =>
-                {
-                    b.Property<int>("categoryID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("categoryName");
-
-                    b.HasKey("categoryID");
-
-                    b.ToTable("categories");
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.Image", b =>
-                {
-                    b.Property<int>("imageID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int?>("businessID");
-
-                    b.Property<string>("imageUrl");
-
-                    b.Property<int?>("itemID");
-
-                    b.HasKey("imageID");
-
-                    b.HasIndex("businessID");
-
-                    b.HasIndex("itemID");
-
-                    b.ToTable("images");
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.Item", b =>
-                {
-                    b.Property<int>("itemID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int?>("businessID");
-
-                    b.Property<string>("itemDescription");
-
-                    b.Property<string>("itemName");
-
-                    b.Property<decimal>("itemPrice");
-
-                    b.Property<int?>("itemThumbimageID");
-
-                    b.HasKey("itemID");
-
-                    b.HasIndex("businessID");
-
-                    b.HasIndex("itemThumbimageID");
-
-                    b.ToTable("items");
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.Location", b =>
-                {
-                    b.Property<int>("locationID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("latitude");
-
-                    b.Property<int>("longitude");
-
-                    b.HasKey("locationID");
-
-                    b.ToTable("Location");
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.Reviews", b =>
-                {
-                    b.Property<int>("reviewID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int?>("businessID");
-
-                    b.Property<string>("review");
-
-                    b.Property<string>("userId");
-
-                    b.HasKey("reviewID");
-
-                    b.HasIndex("businessID");
-
-                    b.HasIndex("userId");
-
-                    b.ToTable("reviews");
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.SubCategory", b =>
-                {
-                    b.Property<int>("subcategoryID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("subCategoryName");
-
-                    b.HasKey("subcategoryID");
-
-                    b.ToTable("subCategories");
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.ApplicationUser", b =>
+            modelBuilder.Entity("coreenginex.Models.ApplicationUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUser");
 
@@ -340,6 +350,64 @@ namespace WebApplication1.Migrations
                     b.ToTable("ApplicationUser");
 
                     b.HasDiscriminator().HasValue("ApplicationUser");
+                });
+
+            modelBuilder.Entity("coreenginex.Models.Attributes", b =>
+                {
+                    b.HasOne("coreenginex.Models.Item")
+                        .WithMany("itemAttributes")
+                        .HasForeignKey("itemID");
+                });
+
+            modelBuilder.Entity("coreenginex.Models.Business", b =>
+                {
+                    b.HasOne("coreenginex.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.HasOne("coreenginex.Models.Image", "businessThumb")
+                        .WithMany()
+                        .HasForeignKey("businessThumbimageID");
+                });
+
+            modelBuilder.Entity("coreenginex.Models.Image", b =>
+                {
+                    b.HasOne("coreenginex.Models.Business")
+                        .WithMany("businessGallery")
+                        .HasForeignKey("businessID");
+
+                    b.HasOne("coreenginex.Models.Item")
+                        .WithMany("itemGallery")
+                        .HasForeignKey("itemID");
+                });
+
+            modelBuilder.Entity("coreenginex.Models.Item", b =>
+                {
+                    b.HasOne("coreenginex.Models.Business")
+                        .WithMany("products")
+                        .HasForeignKey("businessID");
+
+                    b.HasOne("coreenginex.Models.Image", "itemThumb")
+                        .WithMany()
+                        .HasForeignKey("itemThumbimageID");
+                });
+
+            modelBuilder.Entity("coreenginex.Models.Reviews", b =>
+                {
+                    b.HasOne("coreenginex.Models.Business")
+                        .WithMany("reviews")
+                        .HasForeignKey("businessID");
+
+                    b.HasOne("coreenginex.Models.ApplicationUser", "user")
+                        .WithMany()
+                        .HasForeignKey("userId");
+                });
+
+            modelBuilder.Entity("coreenginex.Models.SubCategory", b =>
+                {
+                    b.HasOne("coreenginex.Models.Category", "category")
+                        .WithMany()
+                        .HasForeignKey("categoryID");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
@@ -379,64 +447,17 @@ namespace WebApplication1.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.Attributes", b =>
+            modelBuilder.Entity("coreenginex.Models.ApplicationUser", b =>
                 {
-                    b.HasOne("WebApplication1.Models.Item")
-                        .WithMany("itemAttributes")
-                        .HasForeignKey("itemID");
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.Business", b =>
-                {
-                    b.HasOne("WebApplication1.Models.Image", "businessThumb")
-                        .WithMany()
-                        .HasForeignKey("businessThumbimageID");
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.Image", b =>
-                {
-                    b.HasOne("WebApplication1.Models.Business")
-                        .WithMany("businessGallery")
-                        .HasForeignKey("businessID");
-
-                    b.HasOne("WebApplication1.Models.Item")
-                        .WithMany("itemGallery")
-                        .HasForeignKey("itemID");
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.Item", b =>
-                {
-                    b.HasOne("WebApplication1.Models.Business")
-                        .WithMany("products")
-                        .HasForeignKey("businessID");
-
-                    b.HasOne("WebApplication1.Models.Image", "itemThumb")
-                        .WithMany()
-                        .HasForeignKey("itemThumbimageID");
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.Reviews", b =>
-                {
-                    b.HasOne("WebApplication1.Models.Business")
-                        .WithMany("reviews")
-                        .HasForeignKey("businessID");
-
-                    b.HasOne("WebApplication1.Models.ApplicationUser", "user")
-                        .WithMany()
-                        .HasForeignKey("userId");
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.ApplicationUser", b =>
-                {
-                    b.HasOne("WebApplication1.Models.Business")
+                    b.HasOne("coreenginex.Models.Business")
                         .WithMany("followers")
                         .HasForeignKey("businessID");
 
-                    b.HasOne("WebApplication1.Models.Business")
+                    b.HasOne("coreenginex.Models.Business")
                         .WithMany("ourTeam")
                         .HasForeignKey("businessID1");
 
-                    b.HasOne("WebApplication1.Models.Location", "location")
+                    b.HasOne("coreenginex.Models.Location", "location")
                         .WithMany()
                         .HasForeignKey("locationID");
                 });

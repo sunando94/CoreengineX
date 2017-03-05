@@ -8,9 +8,10 @@ using coreenginex;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170305100825_time")]
+    partial class time
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")
@@ -75,8 +76,6 @@ namespace WebApplication1.Migrations
 
                     b.Property<int?>("categoryID");
 
-                    b.Property<int?>("logoimageID");
-
                     b.Property<int?>("subcategoryID");
 
                     b.HasKey("businessID");
@@ -84,8 +83,6 @@ namespace WebApplication1.Migrations
                     b.HasIndex("UserId");
 
                     b.HasIndex("categoryID");
-
-                    b.HasIndex("logoimageID");
 
                     b.HasIndex("subcategoryID");
 
@@ -113,13 +110,9 @@ namespace WebApplication1.Migrations
 
                     b.Property<string>("PocId");
 
-                    b.Property<int?>("businessID");
-
                     b.HasKey("DepartmentID");
 
                     b.HasIndex("PocId");
-
-                    b.HasIndex("businessID");
 
                     b.ToTable("departments");
                 });
@@ -439,6 +432,8 @@ namespace WebApplication1.Migrations
 
                     b.Property<int?>("AddressID");
 
+                    b.Property<int?>("DepartmentID");
+
                     b.Property<string>("firstName");
 
                     b.Property<string>("lastName");
@@ -448,6 +443,8 @@ namespace WebApplication1.Migrations
                     b.Property<string>("profilepicUrl");
 
                     b.HasIndex("AddressID");
+
+                    b.HasIndex("DepartmentID");
 
                     b.HasIndex("locationID");
 
@@ -473,10 +470,6 @@ namespace WebApplication1.Migrations
                         .WithMany()
                         .HasForeignKey("categoryID");
 
-                    b.HasOne("coreenginex.Models.Image", "logo")
-                        .WithMany()
-                        .HasForeignKey("logoimageID");
-
                     b.HasOne("coreenginex.Models.SubCategory", "subCategory")
                         .WithMany()
                         .HasForeignKey("subcategoryID");
@@ -487,10 +480,6 @@ namespace WebApplication1.Migrations
                     b.HasOne("coreenginex.Models.ApplicationUser", "Poc")
                         .WithMany()
                         .HasForeignKey("PocId");
-
-                    b.HasOne("coreenginex.Models.Business")
-                        .WithMany("departments")
-                        .HasForeignKey("businessID");
                 });
 
             modelBuilder.Entity("coreenginex.Models.Image", b =>
@@ -611,6 +600,10 @@ namespace WebApplication1.Migrations
                     b.HasOne("coreenginex.Models.Address", "address")
                         .WithMany()
                         .HasForeignKey("AddressID");
+
+                    b.HasOne("coreenginex.Models.Department")
+                        .WithMany("ourTeam")
+                        .HasForeignKey("DepartmentID");
 
                     b.HasOne("coreenginex.Models.Location", "location")
                         .WithMany()

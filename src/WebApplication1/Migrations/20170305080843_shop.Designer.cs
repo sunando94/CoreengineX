@@ -8,37 +8,14 @@ using coreenginex;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170305080843_shop")]
+    partial class shop
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("coreenginex.Models.Address", b =>
-                {
-                    b.Property<int>("AddressID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Country");
-
-                    b.Property<string>("PhoneNumber");
-
-                    b.Property<string>("State");
-
-                    b.Property<string>("StreetName");
-
-                    b.Property<string>("city");
-
-                    b.Property<string>("email");
-
-                    b.Property<string>("locality");
-
-                    b.HasKey("AddressID");
-
-                    b.ToTable("address");
-                });
 
             modelBuilder.Entity("coreenginex.Models.Attributes", b =>
                 {
@@ -73,21 +50,9 @@ namespace WebApplication1.Migrations
 
                     b.Property<string>("businessName");
 
-                    b.Property<int?>("categoryID");
-
-                    b.Property<int?>("logoimageID");
-
-                    b.Property<int?>("subcategoryID");
-
                     b.HasKey("businessID");
 
                     b.HasIndex("UserId");
-
-                    b.HasIndex("categoryID");
-
-                    b.HasIndex("logoimageID");
-
-                    b.HasIndex("subcategoryID");
 
                     b.ToTable("businesses");
                 });
@@ -113,13 +78,9 @@ namespace WebApplication1.Migrations
 
                     b.Property<string>("PocId");
 
-                    b.Property<int?>("businessID");
-
                     b.HasKey("DepartmentID");
 
                     b.HasIndex("PocId");
-
-                    b.HasIndex("businessID");
 
                     b.ToTable("departments");
                 });
@@ -133,13 +94,13 @@ namespace WebApplication1.Migrations
 
                     b.Property<int?>("itemID");
 
-                    b.Property<int?>("storeID");
+                    b.Property<int?>("shopID");
 
                     b.HasKey("imageID");
 
                     b.HasIndex("itemID");
 
-                    b.HasIndex("storeID");
+                    b.HasIndex("shopID");
 
                     b.ToTable("images");
                 });
@@ -159,7 +120,7 @@ namespace WebApplication1.Migrations
 
                     b.Property<int?>("itemThumbimageID");
 
-                    b.Property<int?>("storeID");
+                    b.Property<int?>("shopID");
 
                     b.Property<int?>("subcategoryID");
 
@@ -169,7 +130,7 @@ namespace WebApplication1.Migrations
 
                     b.HasIndex("itemThumbimageID");
 
-                    b.HasIndex("storeID");
+                    b.HasIndex("shopID");
 
                     b.HasIndex("subcategoryID");
 
@@ -195,64 +156,37 @@ namespace WebApplication1.Migrations
                     b.Property<int>("reviewID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<decimal>("rating");
-
                     b.Property<string>("review");
 
-                    b.Property<int?>("storeID");
+                    b.Property<int?>("shopID");
 
                     b.Property<string>("userId");
 
                     b.HasKey("reviewID");
 
-                    b.HasIndex("storeID");
+                    b.HasIndex("shopID");
 
                     b.HasIndex("userId");
 
                     b.ToTable("reviews");
                 });
 
-            modelBuilder.Entity("coreenginex.Models.Store", b =>
+            modelBuilder.Entity("coreenginex.Models.Shop", b =>
                 {
-                    b.Property<int>("storeID")
+                    b.Property<int>("shopID")
                         .ValueGeneratedOnAdd();
 
                     b.Property<int?>("businessID");
 
-                    b.Property<string>("closingTime");
+                    b.Property<int?>("shopThumbimageID");
 
-                    b.Property<int?>("locationID");
-
-                    b.Property<string>("openingTime");
-
-                    b.Property<string>("status");
-
-                    b.Property<int?>("storeThumbimageID");
-
-                    b.Property<decimal>("totalRating");
-
-                    b.HasKey("storeID");
+                    b.HasKey("shopID");
 
                     b.HasIndex("businessID");
 
-                    b.HasIndex("locationID");
-
-                    b.HasIndex("storeThumbimageID");
+                    b.HasIndex("shopThumbimageID");
 
                     b.ToTable("shop");
-                });
-
-            modelBuilder.Entity("coreenginex.Models.StoreApplicationUser", b =>
-                {
-                    b.Property<string>("Id");
-
-                    b.Property<int>("storeID");
-
-                    b.HasKey("Id", "storeID");
-
-                    b.HasIndex("storeID");
-
-                    b.ToTable("StoreApplicationUser");
                 });
 
             modelBuilder.Entity("coreenginex.Models.SubCategory", b =>
@@ -437,8 +371,6 @@ namespace WebApplication1.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUser");
 
-                    b.Property<int?>("AddressID");
-
                     b.Property<string>("firstName");
 
                     b.Property<string>("lastName");
@@ -447,9 +379,15 @@ namespace WebApplication1.Migrations
 
                     b.Property<string>("profilepicUrl");
 
-                    b.HasIndex("AddressID");
+                    b.Property<int?>("shopID");
+
+                    b.Property<int?>("shopID1");
 
                     b.HasIndex("locationID");
+
+                    b.HasIndex("shopID");
+
+                    b.HasIndex("shopID1");
 
                     b.ToTable("ApplicationUser");
 
@@ -468,18 +406,6 @@ namespace WebApplication1.Migrations
                     b.HasOne("coreenginex.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
-
-                    b.HasOne("coreenginex.Models.Category", "category")
-                        .WithMany()
-                        .HasForeignKey("categoryID");
-
-                    b.HasOne("coreenginex.Models.Image", "logo")
-                        .WithMany()
-                        .HasForeignKey("logoimageID");
-
-                    b.HasOne("coreenginex.Models.SubCategory", "subCategory")
-                        .WithMany()
-                        .HasForeignKey("subcategoryID");
                 });
 
             modelBuilder.Entity("coreenginex.Models.Department", b =>
@@ -487,10 +413,6 @@ namespace WebApplication1.Migrations
                     b.HasOne("coreenginex.Models.ApplicationUser", "Poc")
                         .WithMany()
                         .HasForeignKey("PocId");
-
-                    b.HasOne("coreenginex.Models.Business")
-                        .WithMany("departments")
-                        .HasForeignKey("businessID");
                 });
 
             modelBuilder.Entity("coreenginex.Models.Image", b =>
@@ -499,9 +421,9 @@ namespace WebApplication1.Migrations
                         .WithMany("itemGallery")
                         .HasForeignKey("itemID");
 
-                    b.HasOne("coreenginex.Models.Store")
-                        .WithMany("storeGallery")
-                        .HasForeignKey("storeID");
+                    b.HasOne("coreenginex.Models.Shop")
+                        .WithMany("shopGallery")
+                        .HasForeignKey("shopID");
                 });
 
             modelBuilder.Entity("coreenginex.Models.Item", b =>
@@ -514,9 +436,9 @@ namespace WebApplication1.Migrations
                         .WithMany()
                         .HasForeignKey("itemThumbimageID");
 
-                    b.HasOne("coreenginex.Models.Store")
+                    b.HasOne("coreenginex.Models.Shop")
                         .WithMany("products")
-                        .HasForeignKey("storeID");
+                        .HasForeignKey("shopID");
 
                     b.HasOne("coreenginex.Models.SubCategory", "subCategory")
                         .WithMany()
@@ -525,41 +447,24 @@ namespace WebApplication1.Migrations
 
             modelBuilder.Entity("coreenginex.Models.Reviews", b =>
                 {
-                    b.HasOne("coreenginex.Models.Store")
+                    b.HasOne("coreenginex.Models.Shop")
                         .WithMany("reviews")
-                        .HasForeignKey("storeID");
+                        .HasForeignKey("shopID");
 
                     b.HasOne("coreenginex.Models.ApplicationUser", "user")
                         .WithMany()
                         .HasForeignKey("userId");
                 });
 
-            modelBuilder.Entity("coreenginex.Models.Store", b =>
+            modelBuilder.Entity("coreenginex.Models.Shop", b =>
                 {
                     b.HasOne("coreenginex.Models.Business")
-                        .WithMany("Store")
+                        .WithMany("Shops")
                         .HasForeignKey("businessID");
 
-                    b.HasOne("coreenginex.Models.Location", "location")
+                    b.HasOne("coreenginex.Models.Image", "shopThumb")
                         .WithMany()
-                        .HasForeignKey("locationID");
-
-                    b.HasOne("coreenginex.Models.Image", "storeThumb")
-                        .WithMany()
-                        .HasForeignKey("storeThumbimageID");
-                });
-
-            modelBuilder.Entity("coreenginex.Models.StoreApplicationUser", b =>
-                {
-                    b.HasOne("coreenginex.Models.ApplicationUser", "User")
-                        .WithMany("watch")
-                        .HasForeignKey("Id")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("coreenginex.Models.Store", "store")
-                        .WithMany("followers")
-                        .HasForeignKey("storeID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("shopThumbimageID");
                 });
 
             modelBuilder.Entity("coreenginex.Models.SubCategory", b =>
@@ -608,13 +513,17 @@ namespace WebApplication1.Migrations
 
             modelBuilder.Entity("coreenginex.Models.ApplicationUser", b =>
                 {
-                    b.HasOne("coreenginex.Models.Address", "address")
-                        .WithMany()
-                        .HasForeignKey("AddressID");
-
                     b.HasOne("coreenginex.Models.Location", "location")
                         .WithMany()
                         .HasForeignKey("locationID");
+
+                    b.HasOne("coreenginex.Models.Shop")
+                        .WithMany("followers")
+                        .HasForeignKey("shopID");
+
+                    b.HasOne("coreenginex.Models.Shop")
+                        .WithMany("ourTeam")
+                        .HasForeignKey("shopID1");
                 });
         }
     }

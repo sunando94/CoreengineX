@@ -1,0 +1,167 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
+using coreenginex.Models;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Net.Http.Headers;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+
+// For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+
+namespace coreenginex.Services
+{
+   
+    [Route("api/[controller]/[action]")]
+    public class AccountController : Controller
+    {
+
+
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IEmailSender _emailSender;
+        private readonly ISmsSender _smsSender;
+        private static bool _databaseChecked;
+        private readonly ILogger _logger;
+        public AccountController(
+       UserManager<ApplicationUser> userManager,
+       SignInManager<ApplicationUser> signInManager,
+       IEmailSender emailSender,
+       ISmsSender smsSender,
+       ILoggerFactory loggerFactory)
+        {
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _emailSender = emailSender;
+            _smsSender = smsSender;
+            _logger = loggerFactory.CreateLogger<AccountController>();
+        }
+        // GET: api/values
+        [HttpPost]
+     
+        [AllowAnonymous]
+        
+        public async Task<IActionResult> Register([FromBody]RegisterViewModel model)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                List<Error> errors = new List<Error>();
+                foreach (ModelError error in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    Error e = new Error
+                    {
+                        errorCode = "400",
+                        errorDescription = error.ErrorMessage
+
+                    };
+                    errors.Add(e);
+                }
+                return BadRequest(errors);
+            }
+            else
+            {
+                Address address = new Address()
+                {
+                    city = model.city,
+                    Country = model.Country,
+                    email = model.Email,
+                    locality = model.locality,
+                    PhoneNumber = model.PhoneNumber,
+                    State = model.State,
+                    StreetName = model.StreetName
+                };
+                ApplicationUser user = new ApplicationUser
+                {
+                    UserName = model.UserName,
+                    Email = model.Email,
+                    firstName = model.firstName,
+                    lastName = model.lastName,
+                    PhoneNumber = model.PhoneNumber,
+                    location = model.location, EmailConfirmed = true,PhoneNumberConfirmed=true,
+                    address=address
+                };
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    return Ok("User created");
+                }
+                else
+                {
+                    return BadRequest(result.Errors);
+                }
+            }
+            
+               
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> AddProfilePicture(IFormFile file)
+        {
+            if(file!=null)
+            {
+                var fileName = file.FileName;
+
+            }
+            return null;
+        }
+        [HttpGet]
+        [Authorize(Roles = "User")]
+        public IActionResult show()
+        {
+            return  Ok("hello");
+    }
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult showanno()
+        {
+            return Ok("hello");
+        }
+    }
+   
+
+    public class RegisterViewModel
+    {
+        [Required(ErrorMessage ="first name is required")]
+        public string firstName { get; set; }
+        [Required(ErrorMessage ="last name is required")]
+        public string lastName { get; set; }
+        [Required(ErrorMessage = "location is required")]
+        public Location location { get; set; }
+
+        [Required(ErrorMessage ="Email is required")]
+        [EmailAddress(ErrorMessage ="Invalid email address")]
+        public string Email { get; set; }
+        [Phone(ErrorMessage ="Invalid phone number")]
+        public string PhoneNumber { get; set; }
+        [Required(ErrorMessage ="Username is required")]
+        public string UserName { get; set; }
+        [Required(ErrorMessage = "Password is required")]
+        [StringLength(255, ErrorMessage = "Must be between 5 and 255 characters", MinimumLength = 5)]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+
+        [Required(ErrorMessage = "Confirm Password is required")]
+        [StringLength(255, ErrorMessage = "Must be between 5 and 255 characters", MinimumLength = 5)]
+        [DataType(DataType.Password)]
+        [Compare("Password")]
+        public string ConfirmPassword { get; set; }
+        [Required(ErrorMessage ="Street Name is required")]
+        public String StreetName { get; set; }
+        [Required(ErrorMessage ="Locality required")]
+        public String locality { get; set; }
+        [Required(ErrorMessage = "City required")]
+        public String city { get; set; }
+        [Required(ErrorMessage = "State required")]
+        public String State { get; set; }
+        [Required(ErrorMessage = "Country required")]
+        public String Country { get; set; }
+
+    }
+}

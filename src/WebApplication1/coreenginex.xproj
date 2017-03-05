@@ -7,7 +7,7 @@
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.Props" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup Label="Globals">
     <ProjectGuid>401e97db-9e71-4b8f-b584-ca1b57fd91bd</ProjectGuid>
-    <RootNamespace>WebApplication1</RootNamespace>
+    <RootNamespace>coreenginex</RootNamespace>
     <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">.\obj</BaseIntermediateOutputPath>
     <OutputPath Condition="'$(OutputPath)'=='' ">.\bin\</OutputPath>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
@@ -16,4 +16,9 @@
     <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <Import Project="$(VSToolsPath)\DotNet.Web\Microsoft.DotNet.Web.targets" Condition="'$(VSToolsPath)' != ''" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

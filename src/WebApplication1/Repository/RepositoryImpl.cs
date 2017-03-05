@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebApplication1.Models;
+using coreenginex.Models;
 
-namespace WebApplication1.Repository
+namespace coreenginex.Repository
 {
     public class CategoryRepository:ICategoryRepository,IDisposable
     {
@@ -111,7 +111,7 @@ namespace WebApplication1.Repository
         {
             if(model!=null)
             {
-                
+                _context.Entry(model.category).State = EntityState.Unchanged;
                 _context.subCategories.Add(model);
             }
         }

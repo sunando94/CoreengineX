@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using WebApplication1.Repository;
-using WebApplication1.Models;
+using coreenginex.Repository;
+using coreenginex.Models;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace WebApplication1.Controllers
+namespace coreenginex.Controllers
 {
     /// <summary>
     /// category controller class
@@ -50,7 +50,7 @@ namespace WebApplication1.Controllers
 
         // POST api/values
         [HttpPost]
-        public IActionResult Post(Category model)
+        public IActionResult Post([FromBody]Category model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -86,7 +86,7 @@ namespace WebApplication1.Controllers
 
         // DELETE api/values/5
     
-            [HttpDelete]
+            [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
             _repository.Delete(id);

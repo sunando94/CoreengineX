@@ -9,12 +9,23 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using WebApplication1.Models;
-using WebApplication1.Repository;
+using coreenginex.Models;
+using coreenginex.Repository;
 using Microsoft.Extensions.PlatformAbstractions;
 using System.IO;
+using coreenginex.Services;
+using coreenginex.Middleware;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Newtonsoft.Json.Serialization;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.AspNetCore.Http;
 
-namespace WebApplication1
+namespace coreenginex
 {
     public class Startup
     {
@@ -33,9 +44,12 @@ namespace WebApplication1
         public IConfigurationRoot Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
+
+        private readonly SymmetricSecurityKey _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("AllowedSecretKey"));
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
+            services.AddOptions();
             services.AddDbContext<ApplicationDbContext>(options =>
                  options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             //Repo linking
@@ -55,26 +69,17 @@ namespace WebApplication1
                     .AllowAnyHeader()
                     .AllowCredentials());
             });
-            
+            services.AddAuthorization();
             services.AddMvc();
-            services.AddSwaggerGen();
-            //   services.ConfigureSwaggerGen(option => );
-            //     option.SingleApiVersion(new Swashbuckle.Swagger.Model.Info{
-
-            // //        Version="v1",
-            //         //                    Title = "Lzyness & bzyness application",
-
-            //        //                   });
-            // ////    //Determine base path for the application.
-            // //    var basePath = PlatformServices.Default.Application.ApplicationBasePath;
-
-            // //    //Set the comments path for the swagger json and ui.
-            // //    var xmlPath = Path.Combine(basePath, "WebApplication1.xml");
-
-            // //    option.IncludeXmlComments(xmlPath);
-
-            //});
-
+            services.AddSwaggerGen(
+                c => {
+                    c.OperationFilter<FileOperationFilter>();
+                    c.OperationFilter<AuthorizationHeaderParameterOperationFilter>();
+                }
+                );
+            
+            services.AddTransient<IEmailSender, AuthMessageSender>();
+            services.AddTransient<ISmsSender, AuthMessageSender>();
 
         }
 
@@ -85,12 +90,84 @@ namespace WebApplication1
             loggerFactory.AddDebug();
             if(env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
+          //  app.CreatePerOwinContext<ApplicationSignInManager>(ApplicationSignInManager.Create);
+            var signingKey = _signingKey;
+            var options = new TokenProviderOption
+            {
+                Audience = "http://localhost:52193/",
+                Issuer = "coreenginex",
+                SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256),
+
+
+            };
+            RolesData.SeedRoles(app.ApplicationServices).Wait();
             app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot", "images", "profilepic")),
+                RequestPath = new PathString("/images")
+            }
+               );
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot", "images", "logo")),
+                RequestPath = new PathString("/logo")
+            }
+               );
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot", "images", "gallery")),
+                RequestPath = new PathString("/gallery")
+            }
+               );
+            app.UseJwtBearerAuthentication(new JwtBearerOptions()
+            {
+                AuthenticationScheme = JwtBearerDefaults.AuthenticationScheme,
+                AutomaticAuthenticate = true,
+                AutomaticChallenge = true,
+                TokenValidationParameters = new TokenValidationParameters()
+                {
+                    IssuerSigningKey = signingKey,
+                    ValidateIssuerSigningKey = true,
+                    ValidateLifetime = true,
+                    ValidAudience = "http://localhost:52193/",
+                    ValidIssuer = "coreenginex"
+                }
+            });
+
+
             app.UseCors("CorsPolicy");
-            app.UseIdentity();
+            
 
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
+            
+            app.UseIdentity();
+            //var jwtAppSettingOptions = Configuration.GetSection(nameof(TokenProviderOption));
+            //var tokenValidationParameters = new TokenValidationParameters
+            //{
+            //    ValidateIssuer = true,
+            //    ValidIssuer = jwtAppSettingOptions[nameof(TokenProviderOption.Issuer)],
 
+            //    ValidateAudience = true,
+            //    ValidAudience = jwtAppSettingOptions[nameof(TokenProviderOption.Audience)],
+
+            //    ValidateIssuerSigningKey = true,
+            //    IssuerSigningKey = signingKey,
+
+            //    RequireExpirationTime = true,
+            //    ValidateLifetime = true,
+
+            //    ClockSkew = TimeSpan.Zero
+            //};
+            //app.UseJwtBearerAuthentication(new JwtBearerOptions
+            //{
+            //    AutomaticAuthenticate = true,
+            //    AutomaticChallenge = true,
+            //    TokenValidationParameters = tokenValidationParameters
+            //});
+
+
+            app.UseMiddleware<TokenProviderMiddleware>(Options.Create(options));
             app.UseMvc(routes =>
             {
                 routes.MapRoute(name: "Home", template: "{controller}/{action}",
