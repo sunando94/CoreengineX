@@ -1,35 +1,23 @@
-﻿@*
+@*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
 }
 
-Home page
-<div id="display"></div>
+<html>
+  <head>
+    <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-<script>
-   
-    var xhr = new XMLHttpRequest();
-    xhr.withCredentials = true;
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+<style>
+body{
+background:url('https://unsplash.com/photos/eScnP9q7Ir4') 100% 100%;
+}
+</style>
 
-    xhr.addEventListener("readystatechange", function () {
-    if (this.readyState === 4) {
-        //document.getElementById("display").innerText = ;
-        var json = this.response;
-        var html = "";
-        json.forEach(function(obj) {  html+="<h2>"+obj.categoryName+"</h2>";
-            html += "<br/>"; });
-           
-       
-       document.getElementById("display").innerHTML = html;
-
-    }
-    });
-
-    xhr.open("GET", "http://localhost:52193/api/category/getall");
-    xhr.setRequestHeader("content-type", "application/json");
-    xhr.setRequestHeader("cache-control", "no-cache");
-    xhr.setRequestHeader("postman-token", "ff423473-cb58-6c83-a81b-e193b4f30edc");
-
-    xhr.send();
-</script>
+  </head>
+  <body>
+  </body>
+</html>
