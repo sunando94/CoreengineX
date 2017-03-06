@@ -176,8 +176,8 @@ namespace coreenginex.Controllers
                 s.closingTime=model.closingTime;
                 s.openingTime=model.openingTime;
                 s.location=model.location;
-                s = new Store()
-                _context.Entry(s).State=Microsoft.EntityFrameworkCore.EntityState.Modified
+                s = new Store();
+                _context.Entry(s).State=Microsoft.EntityFrameworkCore.EntityState.Modified;
                
                 await _context.SaveChangesAsync();
                
@@ -186,7 +186,7 @@ namespace coreenginex.Controllers
             {
                 return BadRequest(new Error() { errorCode = "500", errorDescription = e.InnerException.Message });
             }
-            return Ok(new (){message="store created",data=s});
+            return Ok("store edited");
 
         }
         
