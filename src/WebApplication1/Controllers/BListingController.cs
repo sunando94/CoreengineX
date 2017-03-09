@@ -147,49 +147,7 @@ namespace coreenginex.Controllers
 
         }
         
-        [Authorize]
-        [HttpPost("EditStore/{Sid}")]
-        public async Task<IActionResult> EditStore([FromBody]StoreViewModel model, [FromRoute]int Sid)
-        {
-        Store s;
-            if (!ModelState.IsValid)
-            {
-                List<Error> errors = new List<Error>();
-                foreach (ModelError error in ModelState.Values.SelectMany(v => v.Errors))
-                {
-                    Error e = new Error
-                    {
-                        errorCode = "400",
-                        errorDescription = error.ErrorMessage
-
-                    };
-                    errors.Add(e);
-                }
-                return BadRequest(errors);
-            }
-            
-             try
-            {
-                var userId = _userManager.GetUserId(HttpContext.User);
-                ApplicationUser user = await _userManager.FindByNameAsync(userId);
-                var s = _context.shop.Where(r => r.storeID == Sid).First();
-                s.closingTime=model.closingTime;
-                s.openingTime=model.openingTime;
-                s.location=model.location;
-                s = new Store();
-                _context.Entry(s).State=Microsoft.EntityFrameworkCore.EntityState.Modified;
-               
-                await _context.SaveChangesAsync();
-               
-            }
-            catch (Exception e)
-            {
-                return BadRequest(new Error() { errorCode = "500", errorDescription = e.InnerException.Message });
-            }
-            return Ok("store edited");
-
-        }
-        
+       
         
         /// <summary>
         /// adds or modifies a store thumbnail image
