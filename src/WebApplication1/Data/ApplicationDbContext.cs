@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using coreenginex.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity;
+using System.Threading;
 
 namespace coreenginex
 {
@@ -78,5 +79,21 @@ namespace coreenginex
                 }
             }
         }
+    }
+
+    public class ApplicationUserStore : UserStore<ApplicationUser>
+    {
+        private readonly ApplicationDbContext _context;
+
+        public ApplicationUserStore(ApplicationDbContext context):base(context)
+        {
+
+            _context = context;
+        }
+        public async override Task<ApplicationUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return await Users.Include(r => r.watch).Where(r => r.NormalizedUserName == normalizedUserName).FirstOrDefaultAsync<ApplicationUser>();
+        }
+
     }
 }

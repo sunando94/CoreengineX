@@ -60,6 +60,7 @@ namespace coreenginex
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                .AddEntityFrameworkStores<ApplicationDbContext>()
+               .AddUserStore<ApplicationUserStore>()
                .AddDefaultTokenProviders();
             services.AddCors(options =>
             {
