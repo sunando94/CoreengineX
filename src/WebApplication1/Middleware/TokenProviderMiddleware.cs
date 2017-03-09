@@ -89,6 +89,7 @@ namespace coreenginex.Middleware
 
         private async Task<ClaimsIdentity> GetIdentity(string username, string password)
         {
+            
             ApplicationUser user = await _userManager.FindByNameAsync(username);
             //ApplicationUser test=await   _userManager.FindByIdAsync("019de868-050f-4b9b-89fc-cefa86ca11b3");
             var result = await _signInManager.PasswordSignInAsync(user, password, false, false);
