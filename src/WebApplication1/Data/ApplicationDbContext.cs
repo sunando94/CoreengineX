@@ -90,9 +90,9 @@ namespace coreenginex
 
             _context = context;
         }
-        public async override Task<ApplicationUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken = default(CancellationToken))
+        public  override Task<ApplicationUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await Users.Include(r => r.watch).Where(r => r.NormalizedUserName == normalizedUserName).FirstOrDefaultAsync<ApplicationUser>();
+            return _context.Users.Where(r=>r.NormalizedUserName==normalizedUserName).First<ApplicationUser>();
         }
 
     }
