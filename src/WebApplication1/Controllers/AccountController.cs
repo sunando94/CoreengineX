@@ -92,7 +92,7 @@ namespace coreenginex.Services
         }
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> addPermanentAddress([FromBody]AddressViewModel address,[FromRoute]string Username)
+        public async Task<IActionResult> addPermanentAddress([FromBody]AddressViewModel address)
         {
             if (!ModelState.IsValid)
             {
