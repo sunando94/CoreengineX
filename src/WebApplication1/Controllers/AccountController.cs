@@ -66,16 +66,7 @@ namespace coreenginex.Services
             }
             else
             {
-                Address address = new Address()
-                {
-                    city = model.city,
-                    Country = model.Country,
-                    email = model.Email,
-                    locality = model.locality,
-                    PhoneNumber = model.PhoneNumber,
-                    State = model.State,
-                    StreetName = model.StreetName
-                };
+                
                 ApplicationUser user = new ApplicationUser
                 {
                     UserName = model.UserName,
@@ -83,8 +74,8 @@ namespace coreenginex.Services
                     firstName = model.firstName,
                     lastName = model.lastName,
                     PhoneNumber = model.PhoneNumber,
-                    location = model.location, EmailConfirmed = true,PhoneNumberConfirmed=true,
-                    address=address
+                    EmailConfirmed = true,PhoneNumberConfirmed=true
+                   
                 };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
@@ -132,8 +123,7 @@ namespace coreenginex.Services
         public string firstName { get; set; }
         [Required(ErrorMessage ="last name is required")]
         public string lastName { get; set; }
-        [Required(ErrorMessage = "location is required")]
-        public Location location { get; set; }
+       
 
         [Required(ErrorMessage ="Email is required")]
         [EmailAddress(ErrorMessage ="Invalid email address")]
@@ -152,9 +142,13 @@ namespace coreenginex.Services
         [DataType(DataType.Password)]
         [Compare("Password")]
         public string ConfirmPassword { get; set; }
-        [Required(ErrorMessage ="Street Name is required")]
+       
+    }
+    public class AddressViewModel
+    {
+        [Required(ErrorMessage = "Street Name is required")]
         public String StreetName { get; set; }
-        [Required(ErrorMessage ="Locality required")]
+        [Required(ErrorMessage = "Locality required")]
         public String locality { get; set; }
         [Required(ErrorMessage = "City required")]
         public String city { get; set; }
