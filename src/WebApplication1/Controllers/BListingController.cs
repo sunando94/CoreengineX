@@ -146,9 +146,43 @@ namespace coreenginex.Controllers
             return Ok("store created");
 
         }
-        
-       
-        
+
+        [Authorize]
+        [HttpPost("SetBusinessType/{Bid}")]
+        public async Task<IActionResult> setBusinessType([FromBody]String businessType, [FromRoute]int Bid)
+        {
+            if (!ModelState.IsValid)
+            {
+                List<Error> errors = new List<Error>();
+                foreach (ModelError error in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    Error e = new Error
+                    {
+                        errorCode = "400",
+                        errorDescription = error.ErrorMessage
+
+                    };
+                    errors.Add(e);
+                }
+                return BadRequest(errors);
+            }
+            try
+            {
+                var userId = _userManager.GetUserId(HttpContext.User);
+                ApplicationUser user = await _userManager.FindByNameAsync(userId);
+                var b = _context.businesses.Where(r => r.businessID == Bid).First();
+                b.Type = businessType;
+                _context.Entry(b).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                await _context.SaveChangesAsync();
+
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new Error() { errorCode = "500", errorDescription = e.InnerException.Message });
+            }
+            return Ok("Business type set");
+        }
+
         /// <summary>
         /// adds or modifies a store thumbnail image
         /// </summary>

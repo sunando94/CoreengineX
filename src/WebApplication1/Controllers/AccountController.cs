@@ -90,7 +90,105 @@ namespace coreenginex.Services
             
                
         }
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> addPermanentAddress([FromBody]AddressViewModel address,[FromRoute]string Username)
+        {
+            if (!ModelState.IsValid)
+            {
+                List<Error> errors = new List<Error>();
+                foreach (ModelError error in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    Error e = new Error
+                    {
+                        errorCode = "400",
+                        errorDescription = error.ErrorMessage
 
+                    };
+                    errors.Add(e);
+                }
+                return BadRequest(errors);
+            }
+            else
+            {
+                try
+                {
+                    var Username = _userManager.GetUserId(HttpContext.User);
+                    var user = await _userManager.FindByNameAsync(Username);
+                    if (user == null)
+                        return BadRequest(new Error { errorCode = "400", errorDescription = "no user found with username " + Username });
+                    Address a = new Address
+                    {
+                        city = address.city,
+                        Country = address.Country,
+                        locality = address.locality,
+                        PhoneNumber = address.PhoneNumber,
+                        email = address.Email,
+                        State = address.State,
+                        StreetName = address.StreetName
+                    };
+                    user.permanentAddress = a;
+                    await _userManager.UpdateAsync(user);
+                    
+                        }
+                catch(Exception e)
+                {
+                    return BadRequest(new Error() { errorCode = "400", errorDescription = e.Message });
+                }
+            }
+            return Ok("Permanent address updated");
+
+            }
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> addPresentAddress([FromBody]AddressViewModel address)
+        {
+            if (!ModelState.IsValid)
+            {
+                List<Error> errors = new List<Error>();
+                foreach (ModelError error in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    Error e = new Error
+                    {
+                        errorCode = "400",
+                        errorDescription = error.ErrorMessage
+
+                    };
+                    errors.Add(e);
+                }
+                return BadRequest(errors);
+            }
+            else
+            {
+                try
+                {
+                    var Username = _userManager.GetUserId(HttpContext.User);
+                    
+                    var user = await _userManager.FindByNameAsync(Username);
+                    if (user == null)
+                        return BadRequest(new Error { errorCode = "400", errorDescription = "no user found with username " + Username });
+                    Address a = new Address
+                    {
+                        city = address.city,
+                        Country = address.Country,
+                        locality = address.locality,
+                        PhoneNumber = address.PhoneNumber,
+                        email = address.Email,
+                        State = address.State,
+                        StreetName = address.StreetName
+                    };
+                    user.currentAddress = a;
+                    await _userManager.UpdateAsync(user);
+
+                }
+                catch (Exception e)
+                {
+                    return BadRequest(new Error() { errorCode = "400", errorDescription = e.Message });
+                }
+            }
+            return Ok("present address updated");
+
+        }
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> AddProfilePicture(IFormFile file)
@@ -155,7 +253,14 @@ namespace coreenginex.Services
         [Required(ErrorMessage = "State required")]
         public String State { get; set; }
         [Required(ErrorMessage = "Country required")]
+
         public String Country { get; set; }
+
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress(ErrorMessage = "Invalid email address")]
+        public string Email { get; set; }
+        [Phone(ErrorMessage = "Invalid phone number")]
+        public string PhoneNumber { get; set; }
 
     }
 }

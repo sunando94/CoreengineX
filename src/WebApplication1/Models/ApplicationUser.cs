@@ -15,7 +15,8 @@ namespace coreenginex.Models
         public string lastName { get; set; }
         public Location location { get; set; }
         public string profilepicUrl { get; set; }
-        public Address address { get; set; }
+        public Address permanentAddress { get; set; }
+        public Address currentAddress { get; set; }
 
         public List<StoreApplicationUser> watch { get; set; }
 
