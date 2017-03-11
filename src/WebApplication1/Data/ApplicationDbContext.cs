@@ -90,9 +90,29 @@ namespace coreenginex
 
             _context = context;
         }
-        public async override Task<ApplicationUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken = default(CancellationToken))
+        public override Task<ApplicationUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await Users.Include(r => r.watch).Where(r => r.NormalizedUserName == normalizedUserName).FirstOrDefaultAsync<ApplicationUser>();
+            cancellationToken.ThrowIfCancellationRequested();
+            //var users = Users.ToList();
+            //var user =  Users.Include(r => r.watch).Where(r => r.NormalizedUserName.Contains(normalizedUserName)).FirstAsync<ApplicationUser>();
+            var user = Users.Include(r=>r.watch).Include(r=>r.Logins).Include(r=>r.Roles).Include(r=>r.Claims).FirstOrDefaultAsync<ApplicationUser>(r=>r.NormalizedUserName==normalizedUserName);
+         
+            return user;
+        }
+        public override async Task<IdentityResult> CreateAsync(ApplicationUser user, CancellationToken cancellationToken = default(CancellationToken))
+        {
+
+            _context.Users.Add(user);
+            int a = await _context.SaveChangesAsync();
+
+            await _context.Database.ExecuteSqlCommandAsync(@"UPDATE [dbo].[AspNetUsers] SET [Discriminator] = 'ApplicationUser' WHERE Id = '" + user.Id+"'", cancellationToken);
+            await _context.SaveChangesAsync();
+            IdentityResult result = null;
+            if (a > 0)
+                result = IdentityResult.Success;
+            else
+                result = IdentityResult.Failed();
+            return result;
         }
 
     }

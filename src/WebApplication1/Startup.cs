@@ -24,6 +24,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Newtonsoft.Json.Serialization;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Http;
+using System.Diagnostics;
 
 namespace coreenginex
 {
@@ -48,10 +49,12 @@ namespace coreenginex
         private readonly SymmetricSecurityKey _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("AllowedSecretKey"));
         public void ConfigureServices(IServiceCollection services)
         {
+
             // Add framework services.
             services.AddOptions();
             services.AddDbContext<ApplicationDbContext>(options =>
                  options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            Debug.WriteLine(Configuration.GetConnectionString("DefaultConnection"));
             //Repo linking
             services.AddScoped(typeof(ICategoryRepository),typeof(CategoryRepository));
             services.AddScoped(typeof(ISubCategoryRepository), typeof(SubCategoryRepository));
